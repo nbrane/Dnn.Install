@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.tabSiteInfo = new MetroFramework.Controls.MetroTabPage();
+            this.lblInstallSubFolder = new MetroFramework.Controls.MetroLabel();
+            this.txtInstallSubFolder = new MetroFramework.Controls.MetroTextBox();
+            this.txtSiteNameSuffix = new MetroFramework.Controls.MetroTextBox();
             this.btnSiteInfoBack = new MetroFramework.Controls.MetroButton();
             this.btnSiteInfoNext = new MetroFramework.Controls.MetroButton();
             this.btnLocation = new MetroFramework.Controls.MetroButton();
@@ -46,7 +49,7 @@
             this.txtLocalInstallPackage = new MetroFramework.Controls.MetroTextBox();
             this.lblLatestReleases = new MetroFramework.Controls.MetroLabel();
             this.lblLocalInstallPackage = new MetroFramework.Controls.MetroLabel();
-            this.cboLatestReleases = new MetroFramework.Controls.MetroComboBox();
+            this.cboProductName = new MetroFramework.Controls.MetroComboBox();
             this.btnGetLatestRelease = new MetroFramework.Controls.MetroButton();
             this.btnViewAllReleases = new MetroFramework.Controls.MetroButton();
             this.tabControl = new MetroFramework.Controls.MetroTabControl();
@@ -73,9 +76,7 @@
             this.tileDNNDocumentationCenter = new MetroFramework.Controls.MetroTile();
             this.tileDNNCommunityForums = new MetroFramework.Controls.MetroTile();
             this.lblRemember = new MetroFramework.Controls.MetroLabel();
-            this.txtSiteNameSuffix = new MetroFramework.Controls.MetroTextBox();
-            this.txtInstallSubFolder = new MetroFramework.Controls.MetroTextBox();
-            this.lblInstallSubFolder = new MetroFramework.Controls.MetroLabel();
+            this.cboProductVersion = new MetroFramework.Controls.MetroComboBox();
             this.tabSiteInfo.SuspendLayout();
             this.tabInstallPackage.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -104,6 +105,31 @@
             this.tabSiteInfo.TabIndex = 1;
             this.tabSiteInfo.Text = "Site Info";
             this.tabSiteInfo.VerticalScrollbarBarColor = true;
+            // 
+            // lblInstallSubFolder
+            // 
+            this.lblInstallSubFolder.AutoSize = true;
+            this.lblInstallSubFolder.Location = new System.Drawing.Point(323, 144);
+            this.lblInstallSubFolder.Name = "lblInstallSubFolder";
+            this.lblInstallSubFolder.Size = new System.Drawing.Size(109, 19);
+            this.lblInstallSubFolder.TabIndex = 14;
+            this.lblInstallSubFolder.Text = "Install Sub Folder";
+            // 
+            // txtInstallSubFolder
+            // 
+            this.txtInstallSubFolder.Location = new System.Drawing.Point(323, 169);
+            this.txtInstallSubFolder.Name = "txtInstallSubFolder";
+            this.txtInstallSubFolder.Size = new System.Drawing.Size(217, 23);
+            this.txtInstallSubFolder.TabIndex = 13;
+            // 
+            // txtSiteNameSuffix
+            // 
+            this.txtSiteNameSuffix.FontWeight = MetroFramework.MetroTextBoxWeight.Light;
+            this.txtSiteNameSuffix.Location = new System.Drawing.Point(323, 37);
+            this.txtSiteNameSuffix.Name = "txtSiteNameSuffix";
+            this.txtSiteNameSuffix.Size = new System.Drawing.Size(217, 23);
+            this.txtSiteNameSuffix.TabIndex = 12;
+            this.txtSiteNameSuffix.Text = ".dnndev.me";
             // 
             // btnSiteInfoBack
             // 
@@ -213,13 +239,14 @@
             // 
             // tabInstallPackage
             // 
+            this.tabInstallPackage.Controls.Add(this.cboProductVersion);
             this.tabInstallPackage.Controls.Add(this.progressBarDownload);
             this.tabInstallPackage.Controls.Add(this.btnInstallPackageNext);
             this.tabInstallPackage.Controls.Add(this.btnLocalInstallPackage);
             this.tabInstallPackage.Controls.Add(this.txtLocalInstallPackage);
             this.tabInstallPackage.Controls.Add(this.lblLatestReleases);
             this.tabInstallPackage.Controls.Add(this.lblLocalInstallPackage);
-            this.tabInstallPackage.Controls.Add(this.cboLatestReleases);
+            this.tabInstallPackage.Controls.Add(this.cboProductName);
             this.tabInstallPackage.Controls.Add(this.btnGetLatestRelease);
             this.tabInstallPackage.Controls.Add(this.btnViewAllReleases);
             this.tabInstallPackage.HorizontalScrollbarBarColor = true;
@@ -288,15 +315,15 @@
             this.lblLocalInstallPackage.TabIndex = 25;
             this.lblLocalInstallPackage.Text = "Local Install Package";
             // 
-            // cboLatestReleases
+            // cboProductName
             // 
-            this.cboLatestReleases.FormattingEnabled = true;
-            this.cboLatestReleases.ItemHeight = 23;
-            this.cboLatestReleases.Location = new System.Drawing.Point(1, 33);
-            this.cboLatestReleases.Name = "cboLatestReleases";
-            this.cboLatestReleases.Size = new System.Drawing.Size(539, 29);
-            this.cboLatestReleases.TabIndex = 21;
-            this.cboLatestReleases.SelectedIndexChanged += new System.EventHandler(this.cboLatestReleases_SelectedIndexChanged);
+            this.cboProductName.FormattingEnabled = true;
+            this.cboProductName.ItemHeight = 23;
+            this.cboProductName.Location = new System.Drawing.Point(1, 33);
+            this.cboProductName.Name = "cboProductName";
+            this.cboProductName.Size = new System.Drawing.Size(410, 29);
+            this.cboProductName.TabIndex = 21;
+            this.cboProductName.SelectedIndexChanged += new System.EventHandler(this.cboLatestReleases_SelectedIndexChanged);
             // 
             // btnGetLatestRelease
             // 
@@ -328,7 +355,7 @@
             this.tabControl.Location = new System.Drawing.Point(3, 14);
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 1;
+            this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(607, 294);
             this.tabControl.TabIndex = 26;
             // 
@@ -577,30 +604,14 @@
             this.lblRemember.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblRemember.Visible = false;
             // 
-            // txtSiteNameSuffix
+            // cboProductVersion
             // 
-            this.txtSiteNameSuffix.FontWeight = MetroFramework.MetroTextBoxWeight.Light;
-            this.txtSiteNameSuffix.Location = new System.Drawing.Point(323, 37);
-            this.txtSiteNameSuffix.Name = "txtSiteNameSuffix";
-            this.txtSiteNameSuffix.Size = new System.Drawing.Size(217, 23);
-            this.txtSiteNameSuffix.TabIndex = 12;
-            this.txtSiteNameSuffix.Text = ".dnndev.me";
-            // 
-            // txtInstallSubFolder
-            // 
-            this.txtInstallSubFolder.Location = new System.Drawing.Point(323, 169);
-            this.txtInstallSubFolder.Name = "txtInstallSubFolder";
-            this.txtInstallSubFolder.Size = new System.Drawing.Size(217, 23);
-            this.txtInstallSubFolder.TabIndex = 13;
-            // 
-            // lblInstallSubFolder
-            // 
-            this.lblInstallSubFolder.AutoSize = true;
-            this.lblInstallSubFolder.Location = new System.Drawing.Point(323, 144);
-            this.lblInstallSubFolder.Name = "lblInstallSubFolder";
-            this.lblInstallSubFolder.Size = new System.Drawing.Size(109, 19);
-            this.lblInstallSubFolder.TabIndex = 14;
-            this.lblInstallSubFolder.Text = "Install Sub Folder";
+            this.cboProductVersion.FormattingEnabled = true;
+            this.cboProductVersion.ItemHeight = 23;
+            this.cboProductVersion.Location = new System.Drawing.Point(417, 33);
+            this.cboProductVersion.Name = "cboProductVersion";
+            this.cboProductVersion.Size = new System.Drawing.Size(123, 29);
+            this.cboProductVersion.TabIndex = 30;
             // 
             // Start
             // 
@@ -636,7 +647,7 @@
         private MetroFramework.Controls.MetroLabel lblLocalInstallPackage;
         private MetroFramework.Controls.MetroLabel lblLatestReleases;
         private MetroFramework.Controls.MetroButton btnViewAllReleases;
-        private MetroFramework.Controls.MetroComboBox cboLatestReleases;
+        private MetroFramework.Controls.MetroComboBox cboProductName;
         private MetroFramework.Controls.MetroButton btnGetLatestRelease;
         private MetroFramework.Controls.MetroTabControl tabControl;
         private MetroFramework.Controls.MetroTile tileQuickStartGuide;
@@ -678,5 +689,6 @@
         private MetroFramework.Controls.MetroTextBox txtSiteNameSuffix;
         private MetroFramework.Controls.MetroLabel lblInstallSubFolder;
         private MetroFramework.Controls.MetroTextBox txtInstallSubFolder;
+        private MetroFramework.Controls.MetroComboBox cboProductVersion;
     }
 }
