@@ -34,6 +34,7 @@ using Microsoft.Web.Administration;
 using Ionic.Zip;
 using Ookii.Dialogs;
 using nvQuickSiteValidator;
+using nvQuickSite.Controllers;
 
 namespace nvQuickSite
 {
@@ -51,42 +52,13 @@ namespace nvQuickSite
             tabProgress.Enabled = false;
             tabControl.TabPages.Remove(tabProgress);
 
-            //FeedParser parser = new FeedParser();
-            //var releases = parser.Parse("http://dotnetnuke.codeplex.com/project/feeds/rss?ProjectRSSFeed=codeplex%3a%2f%2frelease%2fdotnetnuke", FeedType.RSS);
-
-            var url = "http://www.nvquicksite.com/downloads/";
-            WebClient client = new WebClient();
-            try
+            var packages = PackageController.GetPackageList();
+            foreach (var package in packages)
             {
-                string result = client.DownloadString(url + "PackageManifest.xml");
-
-                XDocument doc = XDocument.Parse(result);
-                var packages = from x in doc.Descendants("DNNPackage")
-                               select new
-                               {
-                                   Name = x.Descendants("Name").First().Value,
-                                   File = x.Descendants("File").First().Value
-                               };
-
-                foreach (var package in packages)
-                    cboLatestReleases.Items.Add(new ComboItem(url + package.File, package.Name));
-
-                //foreach (var package in packages)
-                //{
-                //    cboLatestReleases.Items.Add(new ComboItem(release.Link, release.Title));
-                //}
-                cboLatestReleases.SelectedIndex = 0;
-                cboLatestReleases.SelectedIndexChanged += cboLatestReleases_SelectedIndexChanged;
-
+                cboLatestReleases.Items.Add(new ComboItem(package.name, package.name));
             }
-            catch (Exception ex)
-            {
-                lblLatestReleases.Text = "INTERNET CURRENTLY UNAVAILABLE: Use Local Install Package Instead";
-                lblLatestReleases.CustomForeColor = true;
-                lblLatestReleases.ForeColor = Color.DarkRed;
-                cboLatestReleases.Enabled = false;
-                btnGetLatestRelease.Enabled = false;
-            }
+            cboLatestReleases.SelectedIndex = 0;
+            cboLatestReleases.SelectedIndexChanged += cboLatestReleases_SelectedIndexChanged;
 
             if (Properties.Settings.Default.RememberFieldValues)
             {

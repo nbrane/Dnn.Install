@@ -134,6 +134,8 @@
   <ItemGroup>
     <Compile Include="CodePlexRSS.cs" />
     <Compile Include="ComboItem.cs" />
+    <Compile Include="Controllers\PackageController.cs" />
+    <Compile Include="Models\Package.cs" />
     <Compile Include="MsgBoxYesNoIgnore.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,0 +1,16 @@
+[
+    {
+        "pid": "dnn-platform",
+        "name": "DNN Platform",
+        "version": "8.0.4",
+        "url": "https://github.com/dnnsoftware/Dnn.Platform/releases/download/v8.0.4/DNN_Platform_8.0.4.226_Install.zip",
+        "upgradeurl": "https://github.com/dnnsoftware/Dnn.Platform/releases/download/v8.0.4/DNN_Platform_8.0.4.226_Upgrade.zip"
+    },
+    {
+        "pid": "dnn-platform",
+        "name": "DNN Platform",
+        "version": "9.0.0",
+        "url": "https://github.com/dnnsoftware/Dnn.Platform/releases/download/v9.0.0/DNN_Platform_9.0.0.1002_Install.zip",
+        "upgradeurl": "https://github.com/dnnsoftware/Dnn.Platform/releases/download/v9.0.0/DNN_Platform_9.0.0.1002_Upgrade.zip"
+    }
+]
