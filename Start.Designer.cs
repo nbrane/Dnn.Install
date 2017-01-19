@@ -323,7 +323,6 @@
             this.cboProductName.Name = "cboProductName";
             this.cboProductName.Size = new System.Drawing.Size(410, 29);
             this.cboProductName.TabIndex = 21;
-            this.cboProductName.SelectedIndexChanged += new System.EventHandler(this.cboLatestReleases_SelectedIndexChanged);
             // 
             // btnGetLatestRelease
             // 

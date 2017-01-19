@@ -35,11 +35,15 @@ using Ionic.Zip;
 using Ookii.Dialogs;
 using nvQuickSiteValidator;
 using nvQuickSite.Controllers;
+using System.Collections.Generic;
 
 namespace nvQuickSite
 {
     public partial class Start : MetroUserControl
     {
+
+        private IEnumerable<Models.Package> Packages { get; set; }
+
         public Start()
         {
             InitializeComponent();
@@ -52,13 +56,17 @@ namespace nvQuickSite
             tabProgress.Enabled = false;
             tabControl.TabPages.Remove(tabProgress);
 
-            var packages = PackageController.GetPackageList();
-            foreach (var package in packages)
+            Packages = PackageController.GetPackageList();
+            foreach (var pid in Packages.OrderBy(p => p.name).Select(p => p.pid).Distinct())
             {
-                cboLatestReleases.Items.Add(new ComboItem(package.name, package.name));
+                cboProductName.Items.Add(new ComboItem(Packages.First(p => p.pid == pid).name, pid));
             }
-            cboLatestReleases.SelectedIndex = 0;
-            cboLatestReleases.SelectedIndexChanged += cboLatestReleases_SelectedIndexChanged;
+            if (cboProductName.Items.Count > 0)
+            {
+                cboProductName.SelectedIndex = 0;
+                cboProductName.SelectedIndexChanged += packageChanged;
+                LoadPackageVersions(((ComboItem)cboProductName.SelectedItem).Value);
+            }
 
             if (Properties.Settings.Default.RememberFieldValues)
             {
@@ -76,9 +84,23 @@ namespace nvQuickSite
         #region "Tabs"
 
         #region "Install Package"
-        private void cboLatestReleases_SelectedIndexChanged(object sender, EventArgs e)
+        private void LoadPackageVersions(string packageId)
         {
-            ComboItem item = cboLatestReleases.SelectedItem as ComboItem;
+            cboProductVersion.Items.Clear();
+            foreach (var package in Packages.Where(p => p.pid == packageId).OrderBy(p => p.version))
+            {
+                cboProductVersion.Items.Add(new ComboItem(package.version, package.version));
+            }
+            if (cboProductVersion.Items.Count > 0)
+            {
+                cboProductVersion.SelectedIndex = cboProductVersion.Items.Count - 1;
+            }
+        }
+
+        private void packageChanged(object sender, EventArgs e)
+        {
+            var pid = ((ComboItem)cboProductName.SelectedItem).Value;
+            LoadPackageVersions(pid);
         }
 
         private void btnGetLatestRelease_Click(object sender, EventArgs e)
@@ -88,13 +110,13 @@ namespace nvQuickSite
 
         private void GetOnlineVersion()
         {
-            ComboItem item = cboLatestReleases.SelectedItem as ComboItem;
-            //Process.Start(item.Name);
+            if (cboProductName.SelectedItem == null || cboProductVersion.SelectedItem == null) { return; }
+            var package = Packages.FirstOrDefault(p => p.pid == ((ComboItem)cboProductName.SelectedItem).Value && p.version == cboProductVersion.SelectedText);
 
             WebClient client = new WebClient();
             client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
             client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-            var fileName = item.Name.Split('/').Last();
+            var fileName = package.url.Split('/').Last();
             var downloadDirectory = Directory.GetCurrentDirectory() + @"\Downloads\";
             if (!Directory.Exists(downloadDirectory))
             {
@@ -114,13 +136,13 @@ namespace nvQuickSite
 
             if (dlContinue)
             {
-                client.DownloadFileAsync(new Uri(item.Name), downloadDirectory + fileName);
+                client.DownloadFileAsync(new Uri(package.url), downloadDirectory + fileName);
                 progressBarDownload.BackColor = Color.WhiteSmoke;
                 progressBarDownload.Visible = true;
             }
             else
             {
-                txtLocalInstallPackage.Text = Directory.GetCurrentDirectory() + "\\Downloads\\" + Path.GetFileName(item.Name);
+                txtLocalInstallPackage.Text = Directory.GetCurrentDirectory() + "\\Downloads\\" + Path.GetFileName(package.url);
                 Properties.Settings.Default.LocalInstallPackageRecent = downloadDirectory;
                 Properties.Settings.Default.Save();
                 ValidateInstallPackage();
@@ -137,18 +159,18 @@ namespace nvQuickSite
 
         void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            ComboItem item = cboLatestReleases.SelectedItem as ComboItem;
-            //MessageBox.Show("Download Completed", "Install Package Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            txtLocalInstallPackage.Text = Directory.GetCurrentDirectory() + @"\Downloads\" + Path.GetFileName(item.Name);
+            var package = Packages.FirstOrDefault(p => p.pid == Convert.ToString(cboProductName.SelectedValue) && p.version == cboProductVersion.SelectedText);
+            var fileName = package.url.Split('/').Last();
+            txtLocalInstallPackage.Text = Directory.GetCurrentDirectory() + @"\Downloads\" + fileName;
             Properties.Settings.Default.LocalInstallPackageRecent = Directory.GetCurrentDirectory() + @"\Downloads\";
             Properties.Settings.Default.Save();
             ValidateInstallPackage();
         }
 
         private void btnViewAllReleases_Click(object sender, EventArgs e)
-                {
-                    Process.Start("https://dotnetnuke.codeplex.com/");
-                }
+        {
+            Process.Start("https://dotnetnuke.codeplex.com/");
+        }
 
         private void txtLocalInstallPackage_Click(object sender, EventArgs e)
         {
@@ -641,7 +663,7 @@ namespace nvQuickSite
 
                 var accessRule2 = new FileSystemAccessRule(accountName, Rights, iFlags, PropagationFlags.InheritOnly, AccessControlType.Allow);
                 dSecurity.ModifyAccessRule(AccessControlModification.Add, accessRule2, out modified);
-                 
+
                 dInfo.SetAccessControl(dSecurity);
             }
             catch (Exception ex)
@@ -697,10 +719,10 @@ namespace nvQuickSite
             {
                 //if (CanConnectToDatabase(myDBServerName))
                 //{
-                    myConn.Open();
-                    myCommand.ExecuteNonQuery();
-                    //MessageBox.Show("Database created successfully", "Create Database", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return true;
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+                //MessageBox.Show("Database created successfully", "Create Database", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return true;
                 //}
                 //else
                 //{
@@ -938,8 +960,8 @@ namespace nvQuickSite
                 targetNode.Value = value;
 
                 var list = from appNode in config.Descendants("appSettings").Elements()
-                    where appNode.Attribute("key").Value == key
-                    select appNode;
+                           where appNode.Attribute("key").Value == key
+                           select appNode;
 
                 var e = list.FirstOrDefault();
                 if (e != null)
