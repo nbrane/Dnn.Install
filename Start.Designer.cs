@@ -43,6 +43,7 @@
             this.txtSiteNamePrefix = new MetroFramework.Controls.MetroTextBox();
             this.toggleSiteInfoRemember = new MetroFramework.Controls.MetroToggle();
             this.tabInstallPackage = new MetroFramework.Controls.MetroTabPage();
+            this.cboProductVersion = new MetroFramework.Controls.MetroComboBox();
             this.progressBarDownload = new MetroFramework.Controls.MetroProgressBar();
             this.btnInstallPackageNext = new MetroFramework.Controls.MetroButton();
             this.btnLocalInstallPackage = new MetroFramework.Controls.MetroButton();
@@ -76,7 +77,6 @@
             this.tileDNNDocumentationCenter = new MetroFramework.Controls.MetroTile();
             this.tileDNNCommunityForums = new MetroFramework.Controls.MetroTile();
             this.lblRemember = new MetroFramework.Controls.MetroLabel();
-            this.cboProductVersion = new MetroFramework.Controls.MetroComboBox();
             this.tabSiteInfo.SuspendLayout();
             this.tabInstallPackage.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -256,6 +256,15 @@
             this.tabInstallPackage.TabIndex = 0;
             this.tabInstallPackage.Text = "Install Package Info";
             this.tabInstallPackage.VerticalScrollbarBarColor = true;
+            // 
+            // cboProductVersion
+            // 
+            this.cboProductVersion.FormattingEnabled = true;
+            this.cboProductVersion.ItemHeight = 23;
+            this.cboProductVersion.Location = new System.Drawing.Point(417, 33);
+            this.cboProductVersion.Name = "cboProductVersion";
+            this.cboProductVersion.Size = new System.Drawing.Size(123, 29);
+            this.cboProductVersion.TabIndex = 30;
             // 
             // progressBarDownload
             // 
@@ -602,15 +611,6 @@
             this.lblRemember.Text = "Remember Field Values";
             this.lblRemember.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblRemember.Visible = false;
-            // 
-            // cboProductVersion
-            // 
-            this.cboProductVersion.FormattingEnabled = true;
-            this.cboProductVersion.ItemHeight = 23;
-            this.cboProductVersion.Location = new System.Drawing.Point(417, 33);
-            this.cboProductVersion.Name = "cboProductVersion";
-            this.cboProductVersion.Size = new System.Drawing.Size(123, 29);
-            this.cboProductVersion.TabIndex = 30;
             // 
             // Start
             // 
